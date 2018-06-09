@@ -6,6 +6,8 @@ import * as React from 'react';
 import * as TileListView from 'tile-list-view';
 import { ExampleViewItem } from './ExampleViewItem';
 
+const isMac: boolean = window.navigator.userAgent.indexOf('Mac OS X') >= 0;
+
 const itemWidth: number = 160;
 const itemHeight: number = 120;
 
@@ -31,7 +33,7 @@ interface State {
 
 export class ExampleView extends React.Component<Props, State> {
   public state: State = {
-    itemSources: Array(200)
+    itemSources: Array(8)
       .fill('Item')
       .map((x: string, i: number) => `${x} ${i}`),
     selection: [1, 3, 5],
@@ -43,6 +45,7 @@ export class ExampleView extends React.Component<Props, State> {
 
     this.handleUpdateSelection = this.handleUpdateSelection.bind(this);
     this.handleUpdateCursor = this.handleUpdateCursor.bind(this);
+    this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   public handleUpdateSelection(selection: number[]): void {
@@ -51,6 +54,40 @@ export class ExampleView extends React.Component<Props, State> {
 
   public handleUpdateCursor(cursor: number): void {
     this.setState({ cursor });
+  }
+
+  public handleKeyDown(event: KeyboardEvent): void {
+    switch (`${event.key}`.toLowerCase()) {
+      case 'delete':
+      case 'backspace':
+        this.setState({
+          itemSources: this.state.itemSources.filter(
+            // tslint:disable-next-line:variable-name
+            (_item: string, index: number) => {
+              return !this.state.selection.includes(index);
+            },
+          ),
+          selection: [],
+        });
+        break;
+      case 'a':
+        if ((isMac && event.metaKey) || (!isMac && event.ctrlKey)) {
+          this.setState({
+            selection: this.state.itemSources.map(
+              // tslint:disable-next-line:variable-name
+              (_item: string, index: number) => {
+                return index;
+              },
+            ),
+          });
+          break;
+        }
+        return;
+      default:
+        return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
   }
 
   public render(): React.ReactNode {
@@ -76,6 +113,7 @@ export class ExampleView extends React.Component<Props, State> {
         focusedStyle={focusedStyle}
         onUpdateSelection={this.handleUpdateSelection}
         onUpdateCursor={this.handleUpdateCursor}
+        onKeyDown={this.handleKeyDown}
       />
     );
   }
