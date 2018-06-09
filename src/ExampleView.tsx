@@ -33,7 +33,7 @@ interface State {
 
 export class ExampleView extends React.Component<Props, State> {
   public state: State = {
-    itemSources: Array(8)
+    itemSources: Array(200)
       .fill('Item')
       .map((x: string, i: number) => `${x} ${i}`),
     selection: [1, 3, 5],
