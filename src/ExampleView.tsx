@@ -92,13 +92,14 @@ export class ExampleView extends React.Component<Props, State> {
 
   public render(): React.ReactNode {
     const { itemSources, selection, cursor } = this.state;
+    const c = itemSources.length <= cursor ? itemSources.length - 1 : cursor;
 
     const items: React.ReactNode[] = itemSources.map(
       (item: string, index: number) => (
         <ExampleViewItem
           content={item}
           selected={selection.includes(index)}
-          cursor={cursor === index}
+          cursor={c === index}
         />
       ),
     );
@@ -109,6 +110,7 @@ export class ExampleView extends React.Component<Props, State> {
         itemWidth={itemWidth}
         itemHeight={itemHeight}
         selection={selection}
+        cursor={c}
         style={style}
         focusedStyle={focusedStyle}
         onUpdateSelection={this.handleUpdateSelection}

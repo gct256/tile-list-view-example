@@ -3,7 +3,7 @@ const path = require('path');
 const distPath = path.resolve(__dirname, 'dist');
 
 const baseConfig = {
-  mode: 'production',
+  mode: 'development', //'production',
   module: {
     rules: [
       {
