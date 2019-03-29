@@ -3,7 +3,7 @@
  */
 import * as React from 'react';
 
-import * as TileListView from 'tile-list-view';
+import { TileListView } from '../../tile-list-view';
 import { ExampleViewItem } from './ExampleViewItem';
 
 const isMac: boolean = window.navigator.userAgent.indexOf('Mac OS X') >= 0;
